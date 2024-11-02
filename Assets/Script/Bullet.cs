@@ -2,10 +2,32 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 5f; 
+    private float speed = 5f;
 
     void Update()
     {
-        transform.Translate(Vector2.right * speed * Time.deltaTime);
+        // ’e‚ğ‰E•ûŒü‚ÉˆÚ“®
+        transform.position += Vector3.right * speed * Time.deltaTime;
+
+        // ƒV[ƒ“ã‚Ì‚·‚×‚Ä‚Ì“G‚Æ“–‚½‚è”»’è‚ğƒ`ƒFƒbƒN
+        Enemy[] enemies = FindObjectsOfType<Enemy>();
+        foreach (Enemy enemy in enemies)
+        {
+            if (CheckCollisionWithEnemy(enemy))
+            {
+                enemy.TakeDamage(); // “G‚Éƒ_ƒ[ƒW‚ğ—^‚¦‚é
+                Destroy(gameObject); // ’e‚ğÁ–Å‚³‚¹‚é
+                break;
+            }
+        }
+    }
+
+    // “G‚Æ‚Ì“–‚½‚è”»’è
+    private bool CheckCollisionWithEnemy(Enemy enemy)
+    {
+        Vector2 bulletPosition = transform.position; // ’e‚ÌˆÊ’u
+        Rect enemyRect = enemy.GetEnemyRect();       // “G‚Ì‹éŒ`—Ìˆæ
+
+        return enemyRect.Contains(bulletPosition); // “G‚Ì‹éŒ`“à‚É’e‚ª‚ ‚é‚©‚Ç‚¤‚©‚ğ”»’è
     }
 }
